@@ -1,31 +1,74 @@
-# Ampliando la cafeteria
+# Ampliando la Cafetería
 
-Continuamos con los mismos productos de antes
+Continuamos con los mismos productos de antes.
 
 Ahora tenemos:
-- Cafe simple
-- Cafe con leche
+
+- Café simple
+- Café con leche
 - Mocha
 - Leche sola
-- Cafe con canela
+- Café con canela
 
-## El codigo
+## El Código
 
-La idea esta vez es darle otra mirada al codigo, esto va a ir creciendo de forma desproporcionada.
+Esta vez, queremos darle un giro al código, porque conforme la cafetería crezca, también crecerá la complejidad del menú.
 
-Como siempre, si no piden algo de eso, entonces hay que avisarles que no lo tenemos.
+Lo importante es que:
 
-Es necesario ir mostrando las cosas que se van haciendo (ejemplo: "Agregando cafe") pero tambien al final de todo mostrar que se devuelve: "cafe".
+- Si un cliente pide algo que no tenemos, le avisemos amablemente.
+- A medida que se preparan los pedidos, se vayan mostrando los pasos (“Agregando café”, “Agregando leche”, etc.).
+- Al final, mostremos el resultado completo del pedido, como “Café Mocha preparado”.
 
+## La Solución: Patrón de Diseño Cadena de Responsabilidad
 
-## El resultado
+Para organizar mejor el código y hacerlo más manejable, usaremos el patrón de diseño “Cadena de Responsabilidad”.
 
-La idea aqui es refactorizar el codigo siguiendo el patron de diseño de cadena de responsabilidad.
+### Los Componentes del Patrón
 
-Primero, la solicitud se transforma en una clase que nos indica cual es el ingrediente que se quiere agregar y que tiene el resultado.
+1. **Solicitud:**
 
-Segundo, se genera una clase abs Handler, la idea es que todos los pasos que agregan ingredientes partan a partir de esta clase.
+   - Esta será una clase que representa lo que el cliente quiere (por ejemplo, agregar café, leche o canela).
+   - Además, lleva el estado del pedido, es decir, lo que ya se ha preparado hasta el momento.
+   - En nuestro ejemplo, la llamaremos `CoffeeRequest`.
 
-Tercero, para facilitar la construccion de la solicitud se genero un factory.
+2. **Handler:**
 
-Si, es necesario dividir esto en mas pasos.
+   - Es una clase base (abstracta) que define un paso en el proceso. Por ejemplo, podría haber un `Coffee` para agregar café o un `Milk` para agregar leche.
+   - Cada paso verifica si puede hacer algo con la solicitud y, si no puede, pasa la solicitud al siguiente handler.
+
+3. **Factory:**
+
+   - Para evitar código repetitivo, la “fábrica” nos ayudará a construir la solicitud inicial de manera sencilla.
+
+### Ejemplo: Preparar un Mocha
+
+Imagina que alguien pide un Mocha. El proceso sería algo como:
+
+- La solicitud llega al `Coffee`, que agrega café.
+- Luego pasa al `Milk`, que agrega leche.
+- Después pasa al `Chocolate`, que agrega chocolate.
+- Cuando llega al `Cinnamon`, como el Mocha no lleva canela, simplemente pasa al siguiente handler (y como es el último, devuelve el `CoffeeRequest`).
+- Finalmente, el pedido completo se devuelve al cliente.
+
+### Diagrama de Clases
+
+Así es como luce la estructura de nuestro código:
+
+![Diagrama de Clases](img/class.png)
+
+### Diagrama de Secuencia
+
+Y aquí está cómo interactúan las diferentes piezas cuando preparamos un café:
+
+![Diagrama de Secuencia](img/seq.png)
+
+## Conclusión
+
+Con este enfoque:
+
+- Podemos agregar nuevos ingredientes o tipos de café sin complicar mucho el código existente, facilitando el principio de Open-Closed.
+- El flujo de preparación es claro y fácil de seguir.
+- Siguiendo el patrón de diseño Cadena de Responsabilidad, tenemos un sistema flexible y escalable que crece junto con nuestra cafetería.
+- Además, cada `Handler` se enfoca exclusivamente en su responsabilidad, cumpliendo con el principio de responsabilidad única.
+
