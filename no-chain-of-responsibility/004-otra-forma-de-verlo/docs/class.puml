@@ -1,14 +1,20 @@
 @startuml
 class CoffeeRequest {
+    +coffee_type: str
     +coffee: bool
     +milk: bool
     +chocolate: bool
     +cinnamon: bool
     +ingredients: list
-    +__init__(self, parameters...)
+    +__init__(self, ...)
 }
 
-class CoffeeHandler {
+abstract class CoffeeHandler {
+    +set_next(handler: CoffeeHandler) -> CoffeeHandler
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class CoffeeHandlerBase {
     -_next_handler: CoffeeHandler
     +set_next(handler: CoffeeHandler) -> CoffeeHandler
     +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
@@ -34,9 +40,10 @@ class CoffeeFactory {
     +create_coffee(coffee_type: str) -> CoffeeRequest
 }
 
-CoffeeHandler <|-- Coffee
-CoffeeHandler <|-- Milk
-CoffeeHandler <|-- Chocolate
-CoffeeHandler <|-- Cinnamon
+CoffeeHandler <|-- CoffeeHandlerBase
+CoffeeHandlerBase <|-- Coffee
+CoffeeHandlerBase <|-- Milk
+CoffeeHandlerBase <|-- Chocolate
+CoffeeHandlerBase <|-- Cinnamon
 CoffeeFactory --> CoffeeRequest
 @enduml

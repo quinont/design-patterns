@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
 
 # Para python mayor o igual a la version 3.11
 # from typing import Self
@@ -6,19 +7,25 @@ from abc import ABC, abstractmethod
 from typing_extensions import Self
 
 
+@dataclass
 class CoffeeRequest:
-    def __init__(
-        self, coffee_type, coffee=False, milk=False, chocolate=False, cinnamon=False
-    ):
-        self.type = coffee_type
-        self.ingredients = []
-        self.coffee = coffee
-        self.milk = milk
-        self.chocolate = chocolate
-        self.cinnamon = cinnamon
+    coffee_type: str
+    coffee: bool = False
+    milk: bool = False
+    chocolate: bool = False
+    cinnamon: bool = False
+    ingredients: list = field(default_factory=list)
 
 
 class CoffeeHandler(ABC):
+    @abstractmethod
+    def set_next(self, handler: Self) -> Self: ...
+
+    @abstractmethod
+    def handle(self, coffee_request: CoffeeRequest) -> CoffeeRequest: ...
+
+
+class CoffeeHandlerBase(ABC):
     def __init__(self):
         self._next_handler = None
 
@@ -26,49 +33,46 @@ class CoffeeHandler(ABC):
         self._next_handler = handler
         return handler
 
-    @abstractmethod
     def handle(self, coffee_request: CoffeeRequest) -> CoffeeRequest:
-        pass
+        if self._next_handler:
+            return self._next_handler.handle(coffee_request)
+        return coffee_request
 
 
-class Coffee(CoffeeHandler):
+class Coffee(CoffeeHandlerBase):
     def handle(self, coffee_request: CoffeeRequest) -> CoffeeRequest:
         if coffee_request.coffee:
             coffee_request.ingredients.append("Cafe")
             print("Agregando cafe...")
 
-        if self._next_handler:
-            self._next_handler.handle(coffee_request)
+        return super().handle(coffee_request)
 
 
-class Milk(CoffeeHandler):
+class Milk(CoffeeHandlerBase):
     def handle(self, coffee_request: CoffeeRequest) -> CoffeeRequest:
         if coffee_request.milk:
             coffee_request.ingredients.append("Leche")
             print("Agregando leche...")
 
-        if self._next_handler:
-            self._next_handler.handle(coffee_request)
+        return super().handle(coffee_request)
 
 
-class Chocolate(CoffeeHandler):
+class Chocolate(CoffeeHandlerBase):
     def handle(self, coffee_request: CoffeeRequest) -> CoffeeRequest:
         if coffee_request.chocolate:
             coffee_request.ingredients.append("Chocolate")
             print("Agregando chocolate...")
 
-        if self._next_handler:
-            self._next_handler.handle(coffee_request)
+        return super().handle(coffee_request)
 
 
-class Cinnamon(CoffeeHandler):
+class Cinnamon(CoffeeHandlerBase):
     def handle(self, coffee_request: CoffeeRequest) -> CoffeeRequest:
         if coffee_request.cinnamon:
             coffee_request.ingredients.append("Canela")
             print("Agregando Canela...")
 
-        if self._next_handler:
-            self._next_handler.handle(coffee_request)
+        return super().handle(coffee_request)
 
 
 class CoffeeFactory:
@@ -100,7 +104,7 @@ def make_coffee(coffee_requests):
         cinnamon_handler
     )
 
-    coffee_handler.handle(request_caffee)
+    request_caffee = coffee_handler.handle(request_caffee)
 
     return request_caffee.ingredients
 

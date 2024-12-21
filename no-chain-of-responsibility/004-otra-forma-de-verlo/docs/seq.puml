@@ -1,11 +1,13 @@
 @startuml
+autonumber
 actor User
 participant "CoffeeFactory" as CF
 participant "make_coffee" as MC
-participant "CoffeeHandler" as CH
-participant "MilkHandler" as MH
-participant "ChocolateHandler" as ChH
-participant "CinnamonHandler" as CiH
+participant "CoffeeHandlerBase" as CHB
+participant "Coffee" as CH
+participant "Milk" as MH
+participant "Chocolate" as ChH
+participant "Cinnamon" as CiH
 participant "CoffeeRequest" as CR
 
 User -> MC: make_coffee(coffee_requests)
@@ -20,12 +22,16 @@ MH -> ChH: set_next(CiH)
 ChH -> CiH: set_next(null)
 
 MC -> CH: handle(CR)
-CH -> MH: handle(CR)
-MH -> ChH: handle(CR)
-ChH -> CiH: handle(CR)
-CiH --> ChH: CR
-ChH --> MH: CR
-MH --> CH: CR
-CH --> MC: CR
+CH -> CHB: handle(CR)
+CHB -> MH: handle(CR)
+MH -> CHB: handle(CR)
+CHB -> ChH: handle(CR)
+ChH -> CHB: handle(CR)
+CHB -> CiH: handle(CR)
+CiH -> CHB: handle(CR)
+CHB --> ChH: return
+ChH --> MH: return
+MH --> CH: return
+CH --> MC: return
 MC --> User: return CR.ingredients
 @enduml
