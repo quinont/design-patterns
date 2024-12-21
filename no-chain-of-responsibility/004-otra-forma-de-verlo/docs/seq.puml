@@ -1,0 +1,31 @@
+@startuml
+actor User
+participant "CoffeeFactory" as CF
+participant "make_coffee" as MC
+participant "CoffeeHandler" as CH
+participant "MilkHandler" as MH
+participant "ChocolateHandler" as ChH
+participant "CinnamonHandler" as CiH
+participant "CoffeeRequest" as CR
+
+User -> MC: make_coffee(coffee_requests)
+MC -> CF: create_coffee(coffee_requests)
+CF -> CR: CoffeeRequest(coffee_type, ...)
+return CR
+CF --> MC: CR
+
+MC -> CH: set_next(MH)
+CH -> MH: set_next(ChH)
+MH -> ChH: set_next(CiH)
+ChH -> CiH: set_next(null)
+
+MC -> CH: handle(CR)
+CH -> MH: handle(CR)
+MH -> ChH: handle(CR)
+ChH -> CiH: handle(CR)
+CiH --> ChH: CR
+ChH --> MH: CR
+MH --> CH: CR
+CH --> MC: CR
+MC --> User: return CR.ingredients
+@enduml

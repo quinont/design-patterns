@@ -1,0 +1,42 @@
+@startuml
+class CoffeeRequest {
+    +coffee: bool
+    +milk: bool
+    +chocolate: bool
+    +cinnamon: bool
+    +ingredients: list
+    +__init__(self, parameters...)
+}
+
+class CoffeeHandler {
+    -_next_handler: CoffeeHandler
+    +set_next(handler: CoffeeHandler) -> CoffeeHandler
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class Coffee {
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class Milk {
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class Chocolate {
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class Cinnamon {
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class CoffeeFactory {
+    +create_coffee(coffee_type: str) -> CoffeeRequest
+}
+
+CoffeeHandler <|-- Coffee
+CoffeeHandler <|-- Milk
+CoffeeHandler <|-- Chocolate
+CoffeeHandler <|-- Cinnamon
+CoffeeFactory --> CoffeeRequest
+@enduml
