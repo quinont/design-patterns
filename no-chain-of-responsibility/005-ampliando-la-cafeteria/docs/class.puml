@@ -1,0 +1,81 @@
+@startuml
+class CoffeeRequest {
+    +coffee_type: str
+    +coffee: bool
+    +milk: bool
+    +chocolate: bool
+    +cinnamon: bool
+    +ingredients: list
+    +__init__(self, ...)
+}
+
+abstract class CoffeeHandler {
+    +set_next(handler: CoffeeHandler) -> CoffeeHandler
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class CoffeeHandlerBase {
+    -_next_handler: CoffeeHandler
+    +set_next(handler: CoffeeHandler) -> CoffeeHandler
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class Coffee {
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class Milk {
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class Chocolate {
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class Cinnamon {
+    +handle(coffee_request: CoffeeRequest) -> CoffeeRequest
+}
+
+class CoffeeFactory {
+    +create_coffee(coffee_type: str) -> CoffeeRequest
+}
+
+class Sweetener {
+    +handle(coffee_request: CoffeeRequest): CoffeeRequest
+}
+
+' Clases concretas de estrategia
+class NormalStir {
+    +stir(): void
+}
+class ThoroughStir {
+    +stir(): void
+}
+class NoStir {
+    +stir(): void
+}
+
+' Relación entre StirringStrategy y estrategias concretas
+StirringStrategy <|-- NormalStir
+StirringStrategy <|-- ThoroughStir
+StirringStrategy <|-- NoStir
+
+' Clase de fábrica para estrategias
+class StirringStrategyFactory {
+    +create_strategy(sweetener_type: str): StirringStrategy
+}
+
+abstract class StirringStrategy {
+    stir(): void
+}
+
+Sweetener --> StirringStrategyFactory
+StirringStrategyFactory --> StirringStrategy
+CoffeeHandler <|-- CoffeeHandlerBase
+CoffeeHandlerBase <|-- Coffee
+CoffeeHandlerBase <|-- Milk
+CoffeeHandlerBase <|-- Chocolate
+CoffeeHandlerBase <|-- Cinnamon
+CoffeeHandlerBase <|-- Sweetener
+CoffeeFactory --> CoffeeRequest
+@enduml
