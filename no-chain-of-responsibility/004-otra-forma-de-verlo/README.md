@@ -1,74 +1,94 @@
-# Ampliando la Cafetería
+# Mismo Café, Otro Código  
 
-Continuamos con los mismos productos de antes.
+La cafetería sigue entregando los mismos productos que antes, pero algo cambió detrás del mostrador: ¡nuestro código! 🎉  
 
-Ahora tenemos:
+## El Menú  
 
-- Café simple
-- Café con leche
-- Mocha
-- Leche sola
-- Café con canela
+- **Café simple**  
+- **Café con leche**  
+- **Mocha**  
+- **Leche sola**  
+- **Café con canela**  
 
-## El Código
+Nada nuevo bajo el sol, pero en el *backend* ahora tenemos un sistema que promete ahorrarnos un montón de dolores de cabeza a medida que crecemos.  
 
-Esta vez, queremos darle un giro al código, porque conforme la cafetería crezca, también crecerá la complejidad del menú.
+---
 
-Lo importante es que:
+## El Código  
 
-- Si un cliente pide algo que no tenemos, le avisemos amablemente.
-- A medida que se preparan los pedidos, se vayan mostrando los pasos (“Agregando café”, “Agregando leche”, etc.).
-- Al final, mostremos el resultado completo del pedido, como “Café Mocha preparado”.
+Decidimos darle un giro al núcleo del sistema:  
+- Si un cliente pide algo que no tenemos, se lo decimos con una sonrisa (y quizás anotamos el pedido para futuras versiones).  
+- Mostramos los pasos de preparación, por ejemplo: *“Agregando café”*, *“Agregando leche”*, etc.  
+- Devolvemos el resultado final del pedido, como *“cafe" "leche" "chocolate"*.  
 
-## La Solución: Patrón de Diseño Cadena de Responsabilidad
+Pero, como los `if` estaban comenzando a parecer un Jenga, optamos por implementar el patrón de diseño **Cadena de Responsabilidad**.  
 
-Para organizar mejor el código y hacerlo más manejable, usaremos el patrón de diseño “Cadena de Responsabilidad”.
+---
 
-### Los Componentes del Patrón
+## La Solución: Cadena de Responsabilidad  
 
-1. **Solicitud:**
+### Los Componentes  
 
-   - Esta será una clase que representa lo que el cliente quiere (por ejemplo, agregar café, leche o canela).
-   - Además, lleva el estado del pedido, es decir, lo que ya se ha preparado hasta el momento.
-   - En nuestro ejemplo, la llamaremos `CoffeeRequest`.
+1. **`CoffeeRequest`:**  
+   - Representa lo que el cliente pide y mantiene el estado del pedido.  
+   - Por ejemplo, si ya se agregó café, leche o canela.  
 
-2. **Handler:**
+2. **`Handler`:**  
+   - Una clase base que define cada paso del proceso de preparación.  
+   - Ejemplos: `CoffeeHandler` para agregar café, `MilkHandler` para agregar leche.  
+   - Si el handler no puede manejar el pedido, lo pasa al siguiente en la cadena.  
 
-   - Es una clase base (abstracta) que define un paso en el proceso. Por ejemplo, podría haber un `Coffee` para agregar café o un `Milk` para agregar leche.
-   - Cada paso verifica si puede hacer algo con la solicitud y, si no puede, pasa la solicitud al siguiente handler.
+3. **Fábrica (`Factory`):**  
+   - Ayuda a construir solicitudes iniciales sin mucho esfuerzo.  
 
-3. **Factory:**
+---
 
-   - Para evitar código repetitivo, la “fábrica” nos ayudará a construir la solicitud inicial de manera sencilla.
+### Ejemplo: Preparar un Mocha  
 
-### Ejemplo: Preparar un Mocha
+Dado la cadena que tenemos, el flujo de preparación se ve así:  
+1. El `CoffeeHandler` agrega café.  
+2. El `MilkHandler` agrega leche.  
+3. El `ChocolateHandler` agrega chocolate.  
+4. El `CinnamonHandler` pasa el pedido al siguiente (porque un Mocha no lleva canela).  
+5. Al final, el sistema devuelve el pedido completo al cliente.  
 
-Imagina que alguien pide un Mocha. El proceso sería algo como:
+---
 
-- La solicitud llega al `Coffee`, que agrega café.
-- Luego pasa al `Milk`, que agrega leche.
-- Después pasa al `Chocolate`, que agrega chocolate.
-- Cuando llega al `Cinnamon`, como el Mocha no lleva canela, simplemente pasa al siguiente handler (y como es el último, devuelve el `CoffeeRequest`).
-- Finalmente, el pedido completo se devuelve al cliente.
+### Importancia de los Archivos  
 
-### Diagrama de Clases
+Aunque modularizamos el código, por ahora todo está en un solo archivo (`main.py`) para facilitar la comparación entre el antes y el después. En proyectos reales, la división en múltiples archivos sería crucial, pero aquí buscamos claridad antes que perfección.  
 
-Así es como luce la estructura de nuestro código:
+---
 
-![Diagrama de Clases](img/class.png)
+### Diagrama de Clases  
 
-### Diagrama de Secuencia
+Así queda nuestra estructura:  
 
-Y aquí está cómo interactúan las diferentes piezas cuando preparamos un café:
+![Diagrama de Clases](img/class.png)  
 
-![Diagrama de Secuencia](img/seq.png)
+---
 
-## Conclusión
+### Diagrama de Secuencia  
 
-Con este enfoque:
+Y este es el flujo para preparar un café:  
 
-- Podemos agregar nuevos ingredientes o tipos de café sin complicar mucho el código existente, facilitando el principio de Open-Closed.
-- El flujo de preparación es claro y fácil de seguir.
-- Siguiendo el patrón de diseño Cadena de Responsabilidad, tenemos un sistema flexible y escalable que crece junto con nuestra cafetería.
-- Además, cada `Handler` se enfoca exclusivamente en su responsabilidad, cumpliendo con el principio de responsabilidad única.
+![Diagrama de Secuencia](img/seq.png)  
 
+---
+
+## Conclusión  
+
+Con este nuevo enfoque:  
+
+- **Escalabilidad:** Podemos añadir nuevos ingredientes o tipos de café sin tocar demasiado el código existente, cumplimos con el principio del Open-Close.  
+- **Claridad:** Cada `Handler` tiene una sola responsabilidad, cumpliendo con el principio de responsabilidad única (SRP).  
+- **Flexibilidad:** Los cambios son más fáciles y menos propensos a romper el código.  
+- Aunque el código parece más complejo ahora, crea una base sólida para futuras expansiones.  
+
+---
+
+## 🚀 Próximo Paso  
+
+Es posible que alguien diga: *“Esto parece más complicado, pero no mejora mucho”*. Y tienen razón... por ahora. Pero en el siguiente episodio, veremos cómo esta estructura brilla cuando añadimos complejidades como endulzar nuestro café.  
+
+¡Nos vemos en el próximo capítulo! Descubre más en [005-ampliando-la-cafeteria](../005-ampliando-la-cafeteria).  

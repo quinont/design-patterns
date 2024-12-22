@@ -16,6 +16,8 @@ Cada endulzante tiene su propio estilo al ser agregado:
 - **Azúcar rubia:** Un batido más intenso para que se mezcle bien.
 - **Stevia:** Se agrega sin batido (sí, ¡es así de simple!).
 
+---
+
 ## ¿Cómo lo hacemos?
 
 Ya usamos el patrón de diseño "Cadena de Responsabilidad" para manejar los pasos en la preparación del café. Ahora, para endulzar, necesitamos más flexibilidad porque cada tipo de endulzante tiene un proceso único. Aquí es donde entra en acción el **Patrón Estrategia**.
@@ -36,6 +38,8 @@ El flujo de interacción entre las piezas al preparar un café es este:
 
 ![Diagrama de Secuencia](img/seq.png)
 
+---
+
 ## Conclusión
 
 La clave es que los patrones de diseño no son exclusivos; pueden (y deben) complementarse entre sí. Aquí combinamos la Cadena de Responsabilidad con el Patrón Estrategia para lograr un código flexible y escalable. 
@@ -53,3 +57,9 @@ Hay algo que comienza a generar ruido en el diseño actual: la relación entre `
 ### ¿Qué otros ejemplos de acoplamiento detectamos?
 
 Revisa el codigo y mira si puedes encontrar algun otro acoplamiento.
+
+---
+
+## Próximo Paso  
+
+Ya no hay mas ejemplos, pero hay un par mas de ejercicios que se pueden hacer en la parte de [006-mas-para-practicar](../006-mas-para-practicar).
