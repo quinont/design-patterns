@@ -1,22 +1,50 @@
-# Ampliando la cafeteria
+# Ampliando la Cafetería
 
-Cada vez mas conocida, ahora pensamos en agregarle a la lista de productos: cafe con leche
+¡Nuestra humilde cafetería sigue ganando fama!
 
-## El codigo
+Ahora es momento de expandir nuestro menú, porque solo servir café simple ya no es suficiente. Así que, por favor, denle la bienvenida a nuestro nuevo producto estrella: **Café con Leche**. 
 
-La idea es que a partir de ahora los clientes pueden elegir entre:
-- Cafe simple
-- Cafe con leche
+¡Un pequeño paso para el menú, pero un gran paso para la diversidad cafetera!
 
-Si no piden algo de eso, entonces hay que avisarles que no lo tenemos.
+---
 
-Es necesario ir mostrando las cosas que se van haciendo (ejemplo: "Agregando cafe") pero tambien al final de todo mostrar que se devuelve: "cafe".
+## El Código
 
+A partir de ahora, nuestros clientes podrán elegir entre:  
+- **Café simple**  
+- **Café con leche**  
 
-## El resultado
+¿Y si piden algo más raro? Pues les decimos con una sonrisa: *"No tenemos eso, pero anotaremos tu idea para el futuro."* (Porque ser humildes también significa escuchar a los clientes).  
 
-Como dice el dicho "un vaso de agua no se le niega a nadie", entonces podemos decir que "un if no se le niega a nadie".
+Como siempre, el código será claro y funcional:  
+- Mostraremos cada paso del proceso: *"Agregando café"*, *"Agregando leche"*.  
+- Al final, devolveremos el producto listo: un simple *"café"* o un *"café", "leche"*.  
 
-Por ahora el codigo es simple, si piden cafe, se agrega cafe y se devuelve, en caso de pedir cafe con leche, se agrega cafe, despues se agrega leche y lo entregamos al cliente.
+Seguimos con nuestra fiel estructura:  
+- Una función `main` para manejar el flujo.  
+- Una función `make_coffee` que hace la magia.  
 
-Facil y rapido. No hay posibilidad de error.
+Y sí, todo esto vive felizmente en nuestro archivo `main.py`. Puedes echarle un vistazo.
+
+---
+
+## El Resultado
+
+Como dice el dicho: *"Un vaso de agua no se le niega a nadie"*, nosotros aplicamos la versión programatica:  
+*"Un `if` no se le niega a nadie."*  
+
+El código es directo:  
+1. Si piden **café simple**, lo hacemos y lo servimos.  
+2. Si piden **café con leche**, agregamos café, luego leche, ¡y listo!  
+3. Si piden algo que no tenemos, lo informamos y seguimos adelante.  
+
+En resumen, un código fácil, rápido y con cero complicaciones.  
+
+> *(Nota: "Cero complicaciones" es subjetivo, dependiendo de cuántos cafés con leche hayas tomado antes de probarlo).*
+
+---
+
+## Próximo Paso
+
+¡Esto recién empieza! El siguiente desafío será agregar más ingredientes al menú.  
+Acompáñanos en [003-agregando-mas-ingredientes](../003-agregando-mas-ingredientes).
