@@ -1,51 +1,55 @@
 # Endulzando el Café
 
-Hasta ahora los ingredientes siempre fueron buenos, de excelente calidad, pero faltaba algo importante: ¡endulzantes!
+Hasta ahora, nuestros cafés siempre tuvieron ingredientes de excelente calidad, pero sentíamos que les faltaba algo importante: ¡un toque dulce!
 
-Por lo tanto, ahora todos los cafés de la cafetería tienen un ingrediente más, algo que los vuelve más dulces.
-
-Pero como sobre gustos no hay nada escrito, el endulzado no es solo endulzado, tenemos variedad para que los clientes puedan seleccionar cómo endulzar sus cafés.
+Por eso, ahora todos los cafés de la cafetería tienen un ingrediente más, algo que los hace más dulces y personalizables. Eso sí, como sobre gustos no hay nada escrito, los clientes pueden elegir entre una variedad de endulzantes. 
 
 ## Tipos de Endulzantes
 
-- Azúcar normal, para los clásicos.
-- Azúcar rubia, para quienes quieren sobresalir.
-- Stevia, para las personas fit.
+- **Azúcar normal**: Para los clásicos que no se complican.
+- **Azúcar rubia**: Para quienes quieren sobresalir (y tienen onda).
+- **Stevia**: Para las personas fit que no se saltan el gym ni un día.
 
-Dependiendo del tipo de endulzante, el proceso cambia, ya que cada uno tiene una forma particular de ser agregado:
+Cada endulzante tiene su propio estilo al ser agregado:
 
-- **Azúcar normal:** Batido normal.
-- **Azúcar rubia:** Un batido más fuerte.
-- **Stevia:** No requiere batido.
+- **Azúcar normal:** Batido normal, sin estrés.
+- **Azúcar rubia:** Un batido más intenso para que se mezcle bien.
+- **Stevia:** Se agrega sin batido (sí, ¡es así de simple!).
 
-## El Código
+## ¿Cómo lo hacemos?
 
-Dado que ya usamos el patrón de diseño de "Cadena de Responsabilidad", la idea es simplemente sumar un elemento más a la cadena: la parte de "endulzar".
+Ya usamos el patrón de diseño "Cadena de Responsabilidad" para manejar los pasos en la preparación del café. Ahora, para endulzar, necesitamos más flexibilidad porque cada tipo de endulzante tiene un proceso único. Aquí es donde entra en acción el **Patrón Estrategia**.
 
-Sin embargo, como cada tipo de endulzante requiere un tratamiento distinto, aquí entra en juego otro patrón de diseño: el **Patrón Estrategia**.
+El patrón Estrategia nos permite elegir dinámicamente la forma de agregar el endulzante en tiempo de ejecución. 
 
-La principal ventaja del patrón Estrategia es que nos permite elegir, en tiempo de ejecución, la manera en que vamos a trabajar. Esto es útil porque solo sabemos cuál será el tipo de endulzante cuando el programa esté corriendo, por lo que este patrón nos da una forma completamente flexible de decidir qué hacer.
-
-Para facilitar la elección de la estrategia y no atar el handler de endulzamiento a una estrategia en concreto, generamos una vez más un factory que flexibiliza la selección de la estrategia partiendo del nombre del endulzante.
+Para facilitar esta elección y no acoplar directamente el handler de "endulzar" a una estrategia específica, utilizamos un **Factory** que selecciona la estrategia correcta a partir del tipo de endulzante.
 
 ### Diagrama de Clases
 
-Así es como luce la estructura de nuestro código:
+La estructura de clases queda más o menos así:
 
 ![Diagrama de Clases](img/class.png)
 
 ### Diagrama de Secuencia
 
-Y aquí está cómo interactúan las diferentes piezas cuando preparamos un café:
+El flujo de interacción entre las piezas al preparar un café es este:
 
 ![Diagrama de Secuencia](img/seq.png)
 
 ## Conclusión
 
-Para ir cerrando, la idea principal es mostrar cómo los patrones de diseño se complementan entre sí. Aunque un patrón sea el "principal", podemos agregar más patrones y combinarlos para que el código sea más fácil de extender y mantener.
+La clave es que los patrones de diseño no son exclusivos; pueden (y deben) complementarse entre sí. Aquí combinamos la Cadena de Responsabilidad con el Patrón Estrategia para lograr un código flexible y escalable. 
 
-Si en el futuro aparece otro tipo de endulzante que requiera una forma particular de batir, simplemente agregamos otra estrategia.
+Si en el futuro aparece otro endulzante con su propio método de batido (¡o sin batido!), solo tenemos que agregar otra estrategia. Sin cambios drásticos en el resto del código.
 
-Es importante destacar que crear un handler de "endulzar" es solo una forma de estructurar el código. También era posible generar tres handlers distintos, uno para cada tipo de endulzante con su batido correspondiente. La agrupación se dio porque consideramos "endulzar" como un único paso de la cadena. Lo esencial es entender cómo trabajan las personas en el contexto del sistema: ¿endulzar es un paso más o cada endulzante tiene un proceso completamente diferente?
+Por cierto, crear un único handler de "endulzar" fue nuestra decisión porque consideramos "endulzar" como un paso único. Pero otra opción habría sido generar un handler por cada tipo de endulzante. Ambas son válidas; lo importante es entender cómo funciona en el contexto del sistema.
 
-No existe un camino perfecto. Siempre habrá ventajas y desventajas. Lo importante es conocerlas, entenderlas y aceptarlas.
+No hay un camino perfecto, pero lo esencial es conocer las opciones, sus ventajas y desventajas, y elegir el mejor para el caso.
+
+## Nota Final
+
+Hay algo que comienza a generar ruido en el diseño actual: la relación entre `main()` y `make_coffee()`. Actualmente, `make_coffee()` también se encarga de generar los pedidos (`request_coffee`), lo que crea un acoplamiento fuerte entre las funciones. Esto sugiere que quizá la responsabilidad de crear los pedidos debería trasladarse a `main()`, reduciendo así el acoplamiento.
+
+### ¿Qué otros ejemplos de acoplamiento detectamos?
+
+Revisa el codigo y mira si puedes encontrar algun otro acoplamiento.
